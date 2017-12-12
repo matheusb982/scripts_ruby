@@ -1,9 +1,3 @@
-# link : http://playground.arduino.cc/interfacing/ruby
-
-#simplest ruby program to read from arduino serial,
-#using the SerialPort gem
-#(http://rubygems.org/gems/serialport)
-
 require "pp"
 require "serialport"
 
@@ -11,8 +5,10 @@ class TTy
 
 	def initialize
 
-		# defaults params for arduino serial
-		baud_rate = 4800
+		puts 'Taxa de Transmissão?'
+		$baud = STDIN.gets
+
+		baud_rate = $baud#4800
 		data_bits = 8
 		stop_bits = 1
 		parity = SerialPort::NONE
@@ -32,9 +28,8 @@ class TTy
 		return if @sp==nil
 		return if reason==:int
 
-		printf("\nshutting down serial (%s)\n", reason)
+		printf("\nDesligando serial (%s)\n", reason)
 
-		# you may write something before closing tty
 		@sp.write(0x00)
 		@sp.flush()
 		printf("done\n")
@@ -42,12 +37,10 @@ class TTy
 
 	def read
 		@sp.flush()
-		printf("# R : reading ...\n")
+		printf("#Lendo ...\n")
 		c=nil
 		while c==nil
-			puts 'ssss'
 			c=@sp.read(1)
-			puts "c >> #{c}"
 			break if c != nil
 		end
 		printf("# R : 0x%02x\n", c.ord)
@@ -66,11 +59,9 @@ class TTy
 	end
 end
 
-
-# serial port should be connected to /dev/ttyUSB*
-ports=Dir.glob("/dev/ttyUSB0")
+ports=Dir.glob("/dev/ttyUSB*")
 if ports.size != 1
-	printf("did not found right /dev/ttyUSB0 serial")
+	printf("Cabo não conectado /dev/ttyUSB* serial\n")
 	exit(1)
 end
 
@@ -80,42 +71,18 @@ tty.open(ports[0])
 at_exit     { tty.shutdown :exit }
 trap("INT") { tty.shutdown :int  ; exit}
 
-# reading thread
 Thread.new do
 	d=0x16
 	pp d
-	cont = 0
-	while cont<5 do
 
-		sleep(0.01)
-		tty.write(d)
-		tty.flush()
+	sleep(0.01)
+	tty.write(d)
+	tty.flush()
 
-		# build a loop with a value (d) cycling from 0 to 255
-		d=d+1
-		d=d%255
-		cont+=1
-	end
-	puts 'terminou'
-
-	contd = 0
-	while contd<5 do
-		puts 'entrou'
-		c=tty.read()
-	  sleep(0.01)
-		contd+=1
-	end
-
-end
-
-#just read forever
-contd = 0
-while contd<5 do
-	puts 'entrou'
 	c=tty.read()
   sleep(0.01)
-	contd+=1
+
 end
 
-sleep 500
-tty.shutdown
+sleep(0.10)
+#tty.shutdown

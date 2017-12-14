@@ -67,6 +67,7 @@ def check_connection
     retur = false
     #on_erro
     #exit(1)
+    not_connect
   end
 
   if retur == true
@@ -104,7 +105,25 @@ def read_write_sp(ports)
   sp.flush()
 
   sleep(0.01)
-  #dialog
+  processing_completed
+end
+
+def not_connect
+  puts 'dialog'
+  md = Gtk::MessageDialog.new(:parent => nil, :flags => :destroy_with_parent,
+                            :type => :error, :buttons_type => :close,
+                            :message => "Cabo não conectado")
+  md.run
+  md.destroy
+end
+
+def processing_completed
+  puts 'dialog'
+  md = Gtk::MessageDialog.new(:parent => nil, :flags => :destroy_with_parent,
+                            :type => :info, :buttons_type => :close,
+                            :message => "Gravação Finalizada")
+  md.run
+  md.destroy
 end
 
 Gtk.main

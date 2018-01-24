@@ -4,7 +4,7 @@ require 'open-uri'
 
 class Synthesizer
   def initialize(region='us-east-1')
-    @polly = Aws::Polly::Client.new(region: region, credentials: Aws::Credentials.new('AKIAIDQGOCNUQNP6Y33Q', 'dYEVzLfW4ZfAhuuNC14Qw93tCtHAjbdba5bNx4Yj'))
+    @polly = Aws::Polly::Client.new(region: region, credentials: Aws::Credentials.new('####', '###'))
   end
 
   def synthesize(text, file_name="./tmp.mp3", voice_id="Ricardo")

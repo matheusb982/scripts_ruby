@@ -40,21 +40,27 @@ def graph_hours_loads_total1(id)
 
   puts '---'
 
-  circuits.each do |circuit|
-    # puts circuit.id
-    puts instan_circ[circuit.id].last.id
-  end
+  # circuits.each do |circuit|
+  #   # puts circuit.id
+  #   puts instan_circ[circuit.id].last.id
+  # end
 
   puts '*******'
   control_hours_seconds = last_one_hour
 
   while (control_hours_seconds < current_hour)
-    puts control_hours_seconds
+    #puts control_hours_seconds
     control_hour = control_hours_seconds += 30.seconds
 
-    puts instany_circuit_measure.where("timestamp >= ?", last_one_hour).where("timestamp < ?", control_hour).last.id
+    ins = instany_circuit_measure.where("timestamp >= ?", last_one_hour).where("timestamp < ?", control_hour)
 
-    control_hours_seconds += 30.seconds
+    if ins.last
+      puts ins.last.timestamp
+      puts '--'
+      puts ins.first.timestamp
+    end
+
+    last_one_hour += 30.seconds
   end
 
 end

@@ -1,3 +1,5 @@
+#Script developed to search for a specific keyword in a PDF file
+
 require 'pdf-reader'
 require 'open-uri'
 
